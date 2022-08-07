@@ -14,7 +14,7 @@ from flask import jsonify
 # 把数据封装为json格式
 def get_json(c, d, m):
     return jsonify({
-        'code': c,
-        'data': d,
-        'message': m
+        'success': c ,
+        'time': d,
+        'msg': m
     })
