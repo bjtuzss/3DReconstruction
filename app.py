@@ -6,8 +6,14 @@ app.config.from_object('config')
 db = SQLAlchemy(app, use_native_unicode='utf8')
 
 from user import user_blue
+from workshop import workshop_blue
+from square import square_blue
+from forum import forum_blue
 
 app.register_blueprint(user_blue)
+app.register_blueprint(workshop_blue)
+app.register_blueprint(square_blue)
+app.register_blueprint(forum_blue)
 
 
 @app.route('/')
