@@ -20,35 +20,53 @@ class DatabaseContract(object):
         self.cursor.close()
         self.conn.close()
 
-    def modify_project(self, username, password):  # 登录
+    def basic(self):  # 获取社区基础信息
         try:
-            sql = "select * from user where userid='" + username + "' and password='" + password + "'"
+            sql = "select * from form_basic"
             self.cursor.execute(sql)
             data = self.cursor.fetchall()
             print(data)
         except:
             return 'error'
         else:
-            return len(data)
+            return data
 
-    def create_project(self, projectid, projectname, password):  # 注册
+    def getAll(self, type):  # 获取所有帖子
         try:
-            sql = "insert into projects values('" + projectid + "','" + projectname + "','" + password + "' , '')"
+            sql = "select * from first_comment where type = " + type
             self.cursor.execute(sql)
-            self.conn.commit()
+            data = self.cursor.fetchall()
         except:
-            self.conn.rollback()
             return 'error'
         else:
-            return 'ok'
+            return data
 
-    def modify_password(self, userid, newpsw):  # 修改密码
+    def get1(self, commentId):  # 获取单个帖子的主体信息
         try:
-            sql = "update user set password = '" + newpsw + "'where userid='" + userid + "'"
+            sql = "select * from first_comment where commentId = " + commentId
             self.cursor.execute(sql)
-            self.conn.commit()
+            data = self.cursor.fetchall()
         except:
-            self.conn.rollback()
             return 'error'
         else:
-            return 'ok'
+            return data
+
+    def get2(self, commentId):  # 获取单个帖子的回复信息
+        try:
+            sql = "select * from second_comment where fCommentId = " + commentId
+            self.cursor.execute(sql)
+            data = self.cursor.fetchall()
+        except:
+            return 'error'
+        else:
+            return data
+
+    def post(self, userid, title, content, type):
+        try:
+            sql = "insert into first_comment values (' " + userid + "', '" + content + "','" + userid + "','" +  + "'"
+            self.cursor.execute(sql)
+            data = self.cursor.fetchall()
+        except:
+            return 'error'
+        else:
+            return data

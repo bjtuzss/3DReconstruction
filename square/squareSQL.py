@@ -20,35 +20,35 @@ class DatabaseContract(object):
         self.cursor.close()
         self.conn.close()
 
-    def modify_project(self, username, password):  # 登录
+    def getAll(self):  # 获得所有已分享模型
         try:
-            sql = "select * from user where userid='" + username + "' and password='" + password + "'"
+            sql = "select projectid, projectname, imgdir, type from projects where share = 1"
+            print(sql)
             self.cursor.execute(sql)
             data = self.cursor.fetchall()
-            print(data)
         except:
             return 'error'
         else:
-            return len(data)
+            return data
 
-    def create_project(self, projectid, projectname, password):  # 注册
+    def get(self, type):  # 获得所有已分享模型
         try:
-            sql = "insert into projects values('" + projectid + "','" + projectname + "','" + password + "' , '')"
+            sql = "select projectid, projectname, imgdir, type from projects where share = 1 and type = '" + type +"'"
+            print(sql)
             self.cursor.execute(sql)
-            self.conn.commit()
+            data = self.cursor.fetchall()
         except:
-            self.conn.rollback()
             return 'error'
         else:
-            return 'ok'
+            return data
 
-    def modify_password(self, userid, newpsw):  # 修改密码
+    def display(self, projectid):  # 获得所有已分享模型
         try:
-            sql = "update user set password = '" + newpsw + "'where userid='" + userid + "'"
+            sql = "select * from projects where share = 1 and projectId = '" + projectid +"'"
+            print(sql)
             self.cursor.execute(sql)
-            self.conn.commit()
+            data = self.cursor.fetchall()
         except:
-            self.conn.rollback()
             return 'error'
         else:
-            return 'ok'
+            return data

@@ -8,56 +8,45 @@ import time
 db = database.DatabaseContract()
 
 
-@square_blue.route('/project/create', methods=['POST'])
-def register():
-    data = request.json
-    print(data)
-    userid = data.get('userid')
-    projectName = data.get('project_name')
-    res = db.create_project(userid, projectName)
-    if res == 'ok':
+@square_blue.route('/models/getAll', methods=['GET'])
+def getAll():
+    res = db.getAll()
+    if res != 'error':
         code = True
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        message = '项目创建成功'
+        message = res
     else:
         code = False
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        message = '创建失败，同名项目已存在'
+        message = '查询失败'
     return get_json(code, data, message)
 
 
-@square_blue.route('/login', methods=['POST'])
-def login():
-    data = request.json
-    username = data.get('username')
-    password = data.get('password')
-    res = db.login(username, password)
-    print(res)
-    if res == 1:
+@square_blue.route('/models/get', methods=['GET'])
+def get():
+    type = request.args.get("type")
+    res = db.get(type)
+    if res != 'error':
         code = True
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        message = '登录成功'
+        message = res
     else:
         code = False
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        message = '用户名或密码错误'
-
+        message = '查询失败'
     return get_json(code, data, message)
 
 
-@square_blue.route('/modify_password', methods=['POST'])
-def modify_password():
-    data = request.json
-    print(data)
-    userid = data.get('userid')
-    newpsw = data.get('newpsw')
-    res = db.modify_password(userid, newpsw)
-    if res == 'ok':
+@square_blue.route('/models/display', methods=['GET'])
+def display():
+    projectid = request.args.get("projectid")
+    res = db.display(projectid)
+    if res != 'error':
         code = True
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        message = '修改成功'
+        message = res
     else:
         code = False
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        message = '修改失败'
+        message = '查询失败'
     return get_json(code, data, message)

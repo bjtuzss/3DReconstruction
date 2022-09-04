@@ -15,7 +15,16 @@ def register():
     userid = data.get('userid')
     username = data.get('username')
     password = data.get('password')
-    res = db.register(userid, username, password)
+    password_repeat = data.get('password_repeat')
+    phone = data.get('phone')
+
+    if password_repeat != password:
+        code = False
+        data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        message = '注册失败，两次密码输入不一致'
+        return get_json(code, data, message)
+
+    res = db.register(userid, username, password, phone)
     if res == 'ok':
         code = True
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
@@ -47,7 +56,7 @@ def login():
 
 
 @user_blue.route('/modify_password', methods=['POST'])
-def modify_password():
+def modifyPassword():
     data = request.json
     print(data)
     userid = data.get('userid')

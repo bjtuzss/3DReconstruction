@@ -1,6 +1,6 @@
 # user模块
 from flask import request
-from utils import get_json
+from utils import get_json, creatUniqueCode
 from workshop import workshop_blue
 import workshopSQL as database
 import time
@@ -9,16 +9,16 @@ db = database.DatabaseContract()
 
 
 @workshop_blue.route('/project/create', methods=['POST'])
-def register():
+def creat():
     data = request.json
-    print(data)
+    projectid = creatUniqueCode()
     userid = data.get('userid')
     projectName = data.get('project_name')
-    res = db.create_project(userid, projectName)
+    res = db.createProject(projectid, userid, projectName)
     if res == 'ok':
         code = True
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        message = '项目创建成功'
+        message = '项目创建成功, 项目标识码为' + projectid
     else:
         code = False
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
@@ -26,13 +26,13 @@ def register():
     return get_json(code, data, message)
 
 
-@workshop_blue.route('/login', methods=['POST'])
-def login():
+@workshop_blue.route('/images/upload', methods=['POST'])
+def upload():
     data = request.json
-    username = data.get('username')
-    password = data.get('password')
-    res = db.login(username, password)
-    print(res)
+    userid = data.get('userid')
+    projectName = data.get('project_name')
+    projectid = data.get('projectid')
+    res = db.upload(username, password)
     if res == 1:
         code = True
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
@@ -45,19 +45,73 @@ def login():
     return get_json(code, data, message)
 
 
-@workshop_blue.route('/modify_password', methods=['POST'])
-def modify_password():
+@workshop_blue.route('/models/getAll', methods=['GET'])
+def getAll():
     data = request.json
-    print(data)
     userid = data.get('userid')
-    newpsw = data.get('newpsw')
-    res = db.modify_password(userid, newpsw)
-    if res == 'ok':
+    res = db.getAll(userid)
+    if res != 'error':
         code = True
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        message = '修改成功'
+        message = res
     else:
         code = False
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         message = '修改失败'
+    return get_json(code, data, message)
+
+
+@workshop_blue.route('/models/display', methods=['POST'])
+def display():
+    data = request.json
+    userid = data.get('userid')
+    projectName = data.get('project_name')
+    projectid = data.get('projectid')
+    res = db.display(userid, projectName, projectid)
+    if res != 'error':
+        code = True
+        data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        message = res
+    else:
+        code = False
+        data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        message = '修改失败'
+    return get_json(code, data, message)
+
+
+@workshop_blue.route('/models/delete', methods=['POST'])
+def delete():
+    data = request.json
+    userid = data.get('userid')
+    projectName = data.get('project_name')
+    projectid = data.get('projectid')
+    res = db.delete(userid, projectName, projectid)
+    if res == 'ok':
+        code = True
+        data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        message = '模型删除成功'
+    else:
+        code = False
+        data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        message = '模型删除失败'
+    return get_json(code, data, message)
+
+
+@workshop_blue.route('/models/share', methods=['POST'])
+def share():
+    data = request.json
+    userid = data.get('userid')
+    projectName = data.get('project_name')
+    projectid = data.get('projectid')
+    type= data.get('type')
+    desc = data.get('desc')
+    res = db.share(userid, projectName, projectid, type, desc)
+    if res == 'ok':
+        code = True
+        data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        message = '模型分享成功'
+    else:
+        code = False
+        data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        message = '模型分享失败'
     return get_json(code, data, message)

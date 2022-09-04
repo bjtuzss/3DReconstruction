@@ -22,7 +22,7 @@ class DatabaseContract(object):
 
     def login(self, username, password):  # 登录
         try:
-            sql = "select * from user where userid='" + username + "' and password='" + password + "'"
+            sql = "select * from user where userId='" + username + "' and password='" + password + "'"
             self.cursor.execute(sql)
             data = self.cursor.fetchall()
             print(data)
@@ -31,9 +31,9 @@ class DatabaseContract(object):
         else:
             return len(data)
 
-    def register(self, userid, username, password):  # 注册
+    def register(self, userid, username, password, phone):  # 注册
         try:
-            sql = "insert into user values('" + userid + "','" + username + "','" + password + "' , '')"
+            sql = "insert into user values('" + userid + "','" + username + "','" + password + "','" + phone + "' , '')"
             self.cursor.execute(sql)
             self.conn.commit()
         except:
@@ -42,9 +42,9 @@ class DatabaseContract(object):
         else:
             return 'ok'
 
-    def modify_password(self, userid, newpsw):  # 修改密码
+    def modifyPassword(self, userid, newpsw):  # 修改密码
         try:
-            sql = "update user set password = '" + newpsw + "'where userid='" + userid + "'"
+            sql = "update user set password = '" + newpsw + "'where userId='" + userid + "'"
             self.cursor.execute(sql)
             self.conn.commit()
         except:

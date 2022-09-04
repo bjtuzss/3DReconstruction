@@ -20,20 +20,10 @@ class DatabaseContract(object):
         self.cursor.close()
         self.conn.close()
 
-    def modify_project(self, username, password):  # 登录
+    def createProject(self, projectid, userid, projectname):  # 注册
         try:
-            sql = "select * from user where userid='" + username + "' and password='" + password + "'"
-            self.cursor.execute(sql)
-            data = self.cursor.fetchall()
-            print(data)
-        except:
-            return 'error'
-        else:
-            return len(data)
-
-    def create_project(self, projectid, projectname, password):  # 注册
-        try:
-            sql = "insert into projects values('" + projectid + "','" + projectname + "','" + password + "' , '')"
+            sql = "insert into projects values('" + projectid + "','" + projectname + "','" + userid + "' , '' , '')"
+            print(sql)
             self.cursor.execute(sql)
             self.conn.commit()
         except:
@@ -42,9 +32,44 @@ class DatabaseContract(object):
         else:
             return 'ok'
 
-    def modify_password(self, userid, newpsw):  # 修改密码
+    def getAll(self, userid):  # 模型列表返回
         try:
-            sql = "update user set password = '" + newpsw + "'where userid='" + userid + "'"
+            sql = "select * from projects where userId = '" + userid + "'"
+            self.cursor.execute(sql)
+            data = self.cursor.fetchall()
+            print(data)
+        except:
+            return 'error'
+        else:
+            return data
+
+    def display(self, userid, projectName, projectid):  # 模型列表返回
+        try:
+            sql = "select ply from projects where userId = '" + userid + "' and projectName = '" + projectName + "'"
+            self.cursor.execute(sql)
+            ply = self.cursor.fetchall()
+            print(ply)
+        except:
+            return 'error'
+        else:
+            return ply
+
+    def delete(self, userid, projectName, projectid):  # 模型删除
+        try:
+            sql = "delete from projects where userId = '" + userid + "' and projectMame = '" + projectName + "'"
+            print(sql)
+            self.cursor.execute(sql)
+            self.conn.commit()
+        except:
+            self.conn.rollback()
+            return 'error'
+        else:
+            return 'ok'
+
+    def share(self, userid, projectName, projectid, type, desc):  # 模型删除
+        try:
+            sql = "update projects set type = '" + type + "', share = " + "1, describtion = '" + desc + "' where userId = '" + userid + "' and projectName = '" + projectName + "'"
+            print(sql)
             self.cursor.execute(sql)
             self.conn.commit()
         except:
