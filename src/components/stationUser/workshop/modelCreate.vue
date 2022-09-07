@@ -121,7 +121,7 @@ export default {
         // 上传图片
         // this.$refs.upload.submit()
         // 上传其他数据
-        const result = await this.$http.post('home/petsInforInput', this.form)
+        const result = await this.$http.post('workshop/project/create', this.form)
         console.log(result.data)
         if (result.data.status === 200) {
           console.log(result.data.msg)

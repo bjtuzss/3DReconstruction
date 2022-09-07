@@ -87,12 +87,12 @@ export default {
     }
   },
   created () {
-    this.$http.get('pets')
+    this.$http.get('/square/models/getAll')
       .then(res => {
         const data = res.data
         console.log(data)
         if (data.status === 200) {
-          this.pets = data.pets
+          this.models = data.models
           for (var i = 0; i < this.pets.length; i++) {
             this.pets[i].pic = require('../../../assets/images/pet' + data.pets[i].pic + '.jpg')
             // console.log(this.pets)

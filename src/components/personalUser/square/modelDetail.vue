@@ -18,7 +18,9 @@
           <el-col :span="18">
             <div class="left">
               <div class="photo">
-                <img :src="model.pic" alt="">
+                <!-- <model-obj id="model" src="static/models/bugatti/bugatti.obj" mtl="static/models/bugatti/bugatti.mtl"></model-obj> -->
+                <!-- <model-obj id="model" src="static/models/test/custom-mesh.obj"></model-obj> -->
+                <model-obj id="model" src="static/models/test/custom-mesh.obj" :lights="lights"></model-obj>
               </div>
             </div>
           </el-col>
@@ -32,6 +34,9 @@
               <h4><font-awesome-icon class="icon" :icon="['fas', 'user']"></font-awesome-icon><span>类型：</span>{{model.type}}</h4>
               <h4><font-awesome-icon class="icon" :icon="['fas', 'phone']"></font-awesome-icon><span>联系电话：</span> {{model.phone}}</h4>
               <!-- <el-button type="primary" @click="handleBtn"><font-awesome-icon :icon="['fas', 'paw']"></font-awesome-icon><span>我想领养它</span></el-button> -->
+              <el-alert title="鼠标拖拽任意旋转模型" :closable="false" type="success"></el-alert>
+              <el-alert title="滚轮滑动对模型进行缩放" :closable="false" type="success"></el-alert>
+              <el-alert title="按住Ctrl在使用鼠标左键可平移模型" :closable="false" type="success"></el-alert>
             </div>
           </el-col>
         </el-row>
@@ -56,10 +61,24 @@
 </template>
 
 <script>
+import { ModelObj } from 'vue-3d-model'
 export default {
+  components: { ModelObj },
   name: '',
   data () {
     return {
+      lights: [{
+        type: 'HemisphereLight',
+        position: { x: 0, y: 1, z: 0 },
+        skyColor: 0xffffff,
+        // groundColor: 0xFF0000, 此代码为灯光后颜色
+        intensity: 1
+      }, {
+        type: 'DirectionalLight',
+        position: { x: 1, y: 1, z: 1 },
+        color: 0xffffff,
+        intensity: 0.8
+      }],
       model: {
         project_name: 'scan1',
         time: '2022-08-04',
@@ -73,7 +92,7 @@ export default {
     handleBtn () {
       const tokenStr = window.sessionStorage.getItem('token')
       if (!tokenStr) {
-        this.$confirm('使用领养功能需要先登录。是否要跳转至登录页面?', '提示', {
+        this.$confirm('使用下载功能需要先登录。是否要跳转至登录页面?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -91,17 +110,19 @@ export default {
     }
   },
   created () {
-    this.$http.get('pets/' + this.$route.params.id)
+    console.log('ddddd' + process.env.BASE_URL)
+    this.$http.get('square/models/display?mid=' + this.$route.params.id)
       .then(res => {
         const data = res.data
         console.log(data)
         if (data.status === 200) {
-          this.pet = data.pet
-          this.pet.pic = require('../../../assets/images/pet' + data.pet.pic + '.jpg')
+          this.model = data.model
+          // this.model.pic = require('../../../assets/images/pet' + data.pet.pic + '.jpg')
         }
       }, error => console.log(error))
   }
 }
+
 </script>
 
 <style lang="less" scoped>
@@ -136,7 +157,7 @@ export default {
         width: 80%;
         height: 96%;
         overflow: hidden;
-        img {
+        #model {
           width: 100%;
         }
       }
@@ -145,6 +166,13 @@ export default {
       margin: 15px;
       height: 480px;
       /*background-color: pink;*/
+      .el-alert:first-of-type {
+        margin-top: 106px;
+      }
+      .el-alert {
+        margin-bottom: 3px;
+        width: 270px;
+      }
       h4 {
         padding: 8px;
         h4 {
