@@ -1,6 +1,6 @@
 # user模块
 from flask import request
-from utils import get_json
+from utils import get_json, getShortId
 from user import user_blue
 import userSQL as database
 import time
@@ -12,11 +12,11 @@ db = database.DatabaseContract()
 def register():
     data = request.json
     print(data)
-    userid = data.get('userid')
+    userid = getShortId()
     username = data.get('username')
-    password = data.get('password')
-    password_repeat = data.get('password_repeat')
-    phone = data.get('phone')
+    password = data.get('password1')
+    password_repeat = data.get('password2')
+    # phone = data.get('phone')
 
     if password_repeat != password:
         code = False
@@ -24,7 +24,7 @@ def register():
         message = '注册失败，两次密码输入不一致'
         return get_json(code, data, message)
 
-    res = db.register(userid, username, password, phone)
+    res = db.register(userid, username, password)
     if res == 'ok':
         code = True
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
@@ -42,7 +42,6 @@ def login():
     username = data.get('username')
     password = data.get('password')
     res = db.login(username, password)
-    print(res)
     if res == 1:
         code = True
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
@@ -52,6 +51,7 @@ def login():
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         message = '用户名或密码错误'
 
+    print(get_json(code, data, message))
     return get_json(code, data, message)
 
 

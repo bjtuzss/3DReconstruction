@@ -1,16 +1,24 @@
 # user模块
-from flask import request
-from utils import get_json, creatUniqueCode
+from flask import request, jsonify
+from utils import get_json, creatUniqueCode, resp_file_upload, fileExit
 from workshop import workshop_blue
 import workshopSQL as database
 import time
 
 db = database.DatabaseContract()
+dafaultDir = "./results/"
 
 
 @workshop_blue.route('/project/create', methods=['POST'])
 def creat():
     data = request.json
+
+    if data.get('file_path'):
+        code = False
+        data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        message = '创建失败，未上传任何图片信息'
+        return get_json(code, data, message)
+
     projectid = creatUniqueCode()
     userid = data.get('userid')
     projectName = data.get('project_name')
@@ -28,21 +36,14 @@ def creat():
 
 @workshop_blue.route('/images/upload', methods=['POST'])
 def upload():
-    data = request.json
-    userid = data.get('userid')
-    projectName = data.get('project_name')
-    projectid = data.get('projectid')
-    res = db.upload(username, password)
-    if res == 1:
-        code = True
-        data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        message = '登录成功'
-    else:
-        code = False
-        data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        message = '用户名或密码错误'
-
-    return get_json(code, data, message)
+    """返回文件上传结果信息"""
+    requ_data = {
+        'file': request.files.get('file'),
+        'file_info': dict(request.form)
+    }
+    filePath = dafaultDir + requ_data.get('file_info').get('user_id') + '_' + requ_data.get('file_info').get('pro_name')
+    resp_data = resp_file_upload(requ_data, filePath)
+    return jsonify(resp_data)
 
 
 @workshop_blue.route('/models/getAll', methods=['GET'])

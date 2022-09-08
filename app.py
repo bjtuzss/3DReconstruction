@@ -1,14 +1,18 @@
+import requests
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-
-app = Flask(__name__)
-app.config.from_object('config')
-db = SQLAlchemy(app, use_native_unicode='utf8')
+from flask_cors import CORS
 
 from user import user_blue
 from workshop import workshop_blue
 from square import square_blue
 from forum import forum_blue
+
+app = Flask(__name__)
+app.config.from_object('config')
+db = SQLAlchemy(app, use_native_unicode='utf8')
+CORS(app, supports_credentials=True)
+
 
 app.register_blueprint(user_blue)
 app.register_blueprint(workshop_blue)

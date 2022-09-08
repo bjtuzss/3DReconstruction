@@ -77,3 +77,7 @@ class DatabaseContract(object):
             return 'error'
         else:
             return 'ok'
+
+    # def upload(self):
+
+

@@ -1,6 +1,9 @@
+import os
+
 from flask import jsonify
 import time
 import datetime
+import uuid
 
 """
 接口说明：
@@ -33,6 +36,33 @@ def creatUniqueCode():
     return return_tm
 
 
+# 使用uuid生成唯一的账号
+def getShortId():
+    return uuid.uuid4().hex[:8]
+
+
+# 在指定路径保存图片
+def resp_file_upload(requ_data, filePath):
+    # 保存文件
+    file_content = requ_data['file']
+    file_name = requ_data['file'].filename
+    file_path = filePath + '/' + file_name
+    if os.path.exists(file_path):
+        return {'msg': '该文件已存在'}
+    else:
+        file_content.save(file_path)
+        return {'msg': '保存文件成功',
+                'filePath': filePath}
+
+
+# 检查路径是否存在
+def fileExit(filePath):
+    if not os.path.exists(filePath):
+        os.makedirs(filePath)
+        return 1
+    return 0
+
+
 # 测试
 if __name__ == '__main__':
-    print(creatUniqueCode())
+    print(getShortId())
