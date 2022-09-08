@@ -110,37 +110,29 @@ export default {
     login () {
       // 方法一  async异步 await 等待
       this.$refs.loginFormRef.validate(async valid => {
-        console.log(valid)
         if (!valid) { return }
-        this.$router.push('/index/home')
         window.sessionStorage.setItem('username', this.loginForm.username)
-        // const result = await this.$http.post('login', this.loginForm)
-        // console.log(result.data)
-        // if (result.data.status === 200) {
-        //   window.sessionStorage.setItem('token', result.data.token)
-        //   window.sessionStorage.setItem('username', this.loginForm.username)
-        //   console.log(result.data.msg)
-        //   this.$message.success(result.data.msg)
-        //   this.$router.push('/index/home')
-        // } else if (result.data.status === 202) {
-        //   this.$message.error(result.data.msg)
-        // } else {
-        //   this.$message.error(result.data.msg)
-        // }
+        const result = await this.$http.post('/user/login', this.loginForm)
+        if (result.data.success) {
+          window.sessionStorage.setItem('token', result.data.token)
+          window.sessionStorage.setItem('username', this.loginForm.username)
+          console.log(result.data.msg)
+          this.$message.success(result.data.msg)
+          await this.$router.push('/index/home')
+        } else {
+          this.$message.error(result.data.msg)
+        }
       })
     },
     register () {
       this.$refs.registerFormRef.validate(async valid => {
-        console.log(valid)
         if (!valid) { return }
-        const result = await this.$http.post('register', this.registerForm)
-        console.log(result.data)
-        if (result.data.status === 200) {
+        const result = await this.$http.post('/user/register', this.registerForm)
+        console.log(result)
+        if (result.data.success) {
           console.log(result.data.msg)
           this.$message.success(result.data.msg)
-          this.flag = 0
-        } else if (result.data.status === 202) {
-          this.$message.error(result.data.msg)
+          this.loginPage()
         } else {
           this.$message.error(result.data.msg)
         }
@@ -148,6 +140,7 @@ export default {
     },
     registerPage () {
       this.flag = 1
+      this.reset()
     },
     loginPage () {
       this.flag = 0

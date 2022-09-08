@@ -66,16 +66,33 @@ export default {
   },
   methods: {
     logout () {
-      this.$http.post('logout', { token: this.token })
-        .then(res => {
-          const data = res.data
-          console.log(data)
-          if (data.status === 200) {
-            window.sessionStorage.clear()
-            this.$router.push('/')
-            this.$router.go(0)
-          }
-        }, error => console.log(error))
+      this.$confirm('是否要退出登录?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        window.sessionStorage.clear()
+        this.$router.push('/')
+        this.$router.go(0)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+      // window.sessionStorage.clear()
+      // this.$router.push('/')
+      // this.$router.go(0)
+      // this.$http.post('logout', { token: this.token })
+      //   .then(res => {
+      //     const data = res.data
+      //     console.log(data)
+      //     if (data.status === 200) {
+      //       window.sessionStorage.clear()
+      //       this.$router.push('/')
+      //       this.$router.go(0)
+      //     }
+      //   }, error => console.log(error))
     },
     handleSelect (key, keyPath) {
       console.log(key, keyPath)
@@ -112,18 +129,19 @@ export default {
       document.documentElement.scrollTop = 0
     },
     toLogin () {
-      this.$confirm('是否要跳转至登录页面?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$router.push('/login')
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })
-      })
+      this.$router.push('/login')
+      // this.$confirm('是否要跳转至登录页面?', '提示', {
+      //   confirmButtonText: '确定',
+      //   cancelButtonText: '取消',
+      //   type: 'warning'
+      // }).then(() => {
+      //   this.$router.push('/login')
+      // }).catch(() => {
+      //   this.$message({
+      //     type: 'info',
+      //     message: '已取消'
+      //   })
+      // })
     }
 
   },

@@ -1,4 +1,5 @@
 module.exports = {
+  // quotes: [0, "double"],
   root: true,
   env: {
     node: true

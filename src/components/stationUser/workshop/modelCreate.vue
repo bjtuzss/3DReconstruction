@@ -16,21 +16,29 @@
           <el-input type="textarea" v-model="form.desc" ></el-input>
         </el-form-item>
         <el-form-item label="图片上传" prop="pic">
-          <el-upload
-            class="upload-demo"
-            action="http://127.0.0.1:5000/upload"
-            ref="upload"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
-            :beforeUpload="beforeAvatarUpload"
-            :limit="1"
-            :data="maxID"
-            :on-exceed="handleExceed"
-            :on-change="handleChange"
-            :file-list="form.fileList"
-            :auto-upload="true"
-          >
+<!--          <el-upload-->
+<!--            class="upload-demo"-->
+<!--            action="http://127.0.0.1:5000/workshop/images/upload"-->
+<!--            :on-preview="handlePreview"-->
+<!--            :on-remove="handleRemove"-->
+<!--            :before-remove="beforeRemove"-->
+<!--            multiple-->
+<!--            :on-change="handleChange"-->
+<!--            :on-exceed="handleExceed"-->
+<!--            :file-list="fileList">-->
+            <el-upload
+              class="upload-demo"
+              :show-file-list="false"
+              action="http://127.0.0.1:5000/workshop/images/upload"
+              name="file"
+              multiple
+              :data="file_info"
+              :on-success="file_upload"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :before-remove="beforeRemove"
+              :on-exceed="handleExceed"
+            >
             <el-button size="small" type="primary">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
@@ -44,13 +52,13 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
+
 export default {
   name: 'inforInput',
   data () {
     return {
-      maxID: {
-        maxID: '100'
-      },
+      fileList: [],
       form: {
         id: 2,
         project_name: 'scan1',
@@ -58,7 +66,8 @@ export default {
         pic: '0',
         desc: '巴拉巴拉',
         fileList: [
-        ]
+        ],
+        file_path: ''
       },
       rules: {
         project_name: [
@@ -76,11 +85,42 @@ export default {
       }
     }
   },
+  computed: {
+    file_info () {
+      return {
+        user_id: window.sessionStorage.getItem('username'),
+        pro_name: this.form.project_name
+      }
+    }
+  },
   methods: {
-    async getMaxID () {
-      const result = await this.$http.get('home/petsInforInput/getMaxID')
-      this.maxID.maxID = result.data
-      console.log(result)
+    async onSubmit () {
+      console.log(this.fileList)
+      const result = await this.$http.post('http://127.0.0.1:5000/workshop/project/create', this.form)
+      console.log(result.data)
+      if (result.data.success) {
+        console.log(result.data.msg)
+        this.$message.success(result.data.msg)
+        this.form = {}
+      } else {
+        this.$message.error(result.data.msg)
+      }
+    },
+    file_upload (resp) {
+      if (resp.msg === '保存文件成功') {
+        this.form.file_path = resp.filePath
+        Message({
+          message: resp.msg,
+          type: 'success',
+          duration: 5 * 1000
+        })
+      } else {
+        Message({
+          message: resp.msg,
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
     },
     handleRemove (file, fileList) {
       console.log(file, fileList)
@@ -89,50 +129,10 @@ export default {
       console.log(file)
     },
     handleExceed (files, fileList) {
-      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
-    },
-    handleChange (file, fileList) {
-      console.log(file.name)
-      this.getMaxID()
+      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
     beforeRemove (file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`)
-    },
-    beforeAvatarUpload (file) {
-      console.log(file.type)
-      const isJPG = file.type === 'image/jpeg'
-      // const isJPG = (file.type === 'image/jpeg' || file.type === 'image/png')
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
-    },
-    onSubmit () {
-      this.$refs.formRef.validate(async valid => {
-        console.log(valid)
-        if (!valid) { return }
-        this.form.sid = window.sessionStorage.getItem('sid')
-        console.log(this.form.fileList)
-        // 上传图片
-        // this.$refs.upload.submit()
-        // 上传其他数据
-        const result = await this.$http.post('workshop/project/create', this.form)
-        console.log(result.data)
-        if (result.data.status === 200) {
-          console.log(result.data.msg)
-          this.$message.success(result.data.msg)
-          this.form = {}
-        } else if (result.data.status === 202) {
-          this.$message.error(result.data.msg)
-        } else {
-          this.$message.error(result.data.msg)
-        }
-      })
     }
   }
 }
