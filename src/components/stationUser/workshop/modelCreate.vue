@@ -13,38 +13,31 @@
           <el-input v-model="form.type"></el-input>
         </el-form-item>
         <el-form-item label="简述" prop="desc">
-          <el-input type="textarea" v-model="form.desc" ></el-input>
+          <el-input type="textarea" v-model="form.desc"></el-input>
         </el-form-item>
         <el-form-item label="图片上传" prop="pic">
-<!--          <el-upload-->
-<!--            class="upload-demo"-->
-<!--            action="http://127.0.0.1:5000/workshop/images/upload"-->
-<!--            :on-preview="handlePreview"-->
-<!--            :on-remove="handleRemove"-->
-<!--            :before-remove="beforeRemove"-->
-<!--            multiple-->
-<!--            :on-change="handleChange"-->
-<!--            :on-exceed="handleExceed"-->
-<!--            :file-list="fileList">-->
-            <el-upload
-              class="upload-demo"
-              :show-file-list="false"
-              action="http://127.0.0.1:5000/workshop/images/upload"
-              name="file"
-              multiple
-              :data="file_info"
-              :on-success="file_upload"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :before-remove="beforeRemove"
-              :on-exceed="handleExceed"
-            >
-            <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          <el-upload
+            class="upload-demo"
+            accept=".jpeg,.png,.jpg,.bmp,.gif"
+            :show-file-list="fileList"
+            action="http://127.0.0.1:5000/workshop/images/upload"
+            name="file"
+            multiple
+            :data="file_info"
+            :before-upload="handleBefore"
+            :on-success="file_upload"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :before-remove="beforeRemove"
+            :on-exceed="handleExceed"
+            v-bind:disabled="this.form.project_name === '' || this.form.type === '' "
+          >
+            <el-button size="small" type="primary" v-bind:disabled="this.form.project_name === '' || this.form.type === '' || this.form.fileList === []">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传图片文件，且不超过500kb</div>
           </el-upload>
         </el-form-item>
         <el-form-item >
-          <el-button type="primary" @click="onSubmit">提交</el-button>
+          <el-button type="primary" @click="onSubmit" v-bind:disabled="this.form.project_name === '' || this.form.type === '' ">提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -60,13 +53,12 @@ export default {
     return {
       fileList: [],
       form: {
-        id: 2,
-        project_name: 'scan1',
-        type: '文物',
-        pic: '0',
-        desc: '巴拉巴拉',
-        fileList: [
-        ],
+        username: window.sessionStorage.getItem('username'),
+        project_name: '',
+        type: '',
+        pic: '',
+        desc: '',
+        fileList: [],
         file_path: ''
       },
       rules: {
@@ -80,7 +72,7 @@ export default {
           { required: true, message: '请上传图片，该项为必填', trigger: 'blur' }
         ],
         desc: [
-          { required: true, message: '请输入简述，该项为必填', trigger: 'blur' }
+          { required: true, message: '请输入简述' }
         ]
       }
     }
@@ -95,9 +87,7 @@ export default {
   },
   methods: {
     async onSubmit () {
-      console.log(this.fileList)
       const result = await this.$http.post('http://127.0.0.1:5000/workshop/project/create', this.form)
-      console.log(result.data)
       if (result.data.success) {
         console.log(result.data.msg)
         this.$message.success(result.data.msg)
@@ -107,20 +97,31 @@ export default {
       }
     },
     file_upload (resp) {
-      if (resp.msg === '保存文件成功') {
+      if (resp.msg === '上传文件成功') {
         this.form.file_path = resp.filePath
         Message({
           message: resp.msg,
           type: 'success',
-          duration: 5 * 1000
+          duration: 1000
         })
       } else {
         Message({
           message: resp.msg,
           type: 'error',
-          duration: 5 * 1000
+          duration: 1000
         })
       }
+    },
+    handleBefore (file, fileList) {
+      console.log(this.form.project_name)
+      console.log(this.form.type)
+      return new Promise((resolve, reject) => {
+        if (this.form.project_name === '' || this.form.type === '') {
+          this.$message.error('请先填写上述必选项')
+          return reject(new Error('请先填写上述必选项'))
+        }
+        return resolve()
+      })
     },
     handleRemove (file, fileList) {
       console.log(file, fileList)
@@ -148,5 +149,15 @@ export default {
     .el-form-item {
       width: 700px;
     }
+  }
+  .upload-demo {
+    max-height: 450px;
+    //overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    -webkit-line-clamp: 10;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    overflow: auto;
   }
 </style>
