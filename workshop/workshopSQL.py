@@ -20,9 +20,10 @@ class DatabaseContract(object):
         self.cursor.close()
         self.conn.close()
 
-    def createProject(self, projectid, userid, projectname):  # 注册
+    def createProject(self, projectid, projectname, username, type, imgdir, desc, createtime):  # 注册
         try:
-            sql = "insert into projects values('" + projectid + "','" + projectname + "','" + userid + "' , '' , '')"
+            sql = "insert into projects values('" + projectid + "','" + projectname + "','" + username + "' , '' , '', '"\
+                  + type + "','" + imgdir + "', 0,'" + desc + "', '" + createtime + "')"
             print(sql)
             self.cursor.execute(sql)
             self.conn.commit()

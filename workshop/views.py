@@ -1,4 +1,6 @@
 # user模块
+import datetime
+
 from flask import request, jsonify
 from utils import get_json, creatUniqueCode, resp_file_upload, fileExit
 from workshop import workshop_blue
@@ -12,17 +14,22 @@ dafaultDir = "./results/"
 @workshop_blue.route('/project/create', methods=['POST'])
 def creat():
     data = request.json
-
-    if data.get('file_path'):
+    print(data)
+    print(len(data.get('file_path')) != 0)
+    if len(data.get('file_path')) == 0:
         code = False
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         message = '创建失败，未上传任何图片信息'
         return get_json(code, data, message)
 
     projectid = creatUniqueCode()
-    userid = data.get('userid')
+    username = data.get('username')
     projectName = data.get('project_name')
-    res = db.createProject(projectid, userid, projectName)
+    type = data.get('type')
+    imgdir = data.get('file_path')
+    desc = data.get('desc')
+    createtime = datetime.datetime.now().strftime('%Y-%m-%d')
+    res = db.createProject(projectid, projectName, username, type, imgdir, desc, createtime)
     if res == 'ok':
         code = True
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
@@ -30,7 +37,7 @@ def creat():
     else:
         code = False
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-        message = '创建失败，同名项目已存在'
+        message = '创建失败，您的项目空间中存在同名项目 ' + projectName
     return get_json(code, data, message)
 
 
