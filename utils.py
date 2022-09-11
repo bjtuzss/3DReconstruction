@@ -49,11 +49,13 @@ def resp_file_upload(requ_data, filePath):
     file_path = filePath + '/' + file_name
     fileExit(filePath)
     if os.path.exists(file_path):
-        return {'msg': '该文件已存在'}
+        return {'msg': '该文件已存在',
+                'code': 0}
     else:
         file_content.save(file_path)
         return {'msg': '上传文件' + file_name + '成功',
-                'filePath': filePath}
+                'filePath': filePath,
+                'code': 1}
 
 
 
