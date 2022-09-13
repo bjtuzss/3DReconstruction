@@ -80,12 +80,6 @@ export default {
             temp.type = data[i].type
             temp.share_username = data[i].userId
             temp.content = data[i].describtion
-            this.$http.get('/square/getPic?path=' + data[i].imgdir)
-              .then(res => {
-                if (res.status === 200) {
-                  temp.pic = 'data:;base64,' + res.data
-                }
-              }, error => console.log(error))
             tempList.push(temp)
           }
           this.models = tempList
