@@ -12,7 +12,7 @@
     <!--主体部分-->
     <el-row>
       <el-col :span="22" :offset="1" class="main">
-        <h3>{{model.title}}</h3>
+        <h3>{{model.title}}</h3><button @click="switchBtn" style="margin-left:20px">点击选择模型</button>
         <!--上半部分-->
         <el-row :gutter="10">
           <el-col :span="18">
@@ -20,7 +20,7 @@
               <div class="photo">
                 <!-- <model-obj id="model" src="static/models/bugatti/bugatti.obj" mtl="static/models/bugatti/bugatti.mtl"></model-obj> -->
                 <!-- <model-obj id="model" src="static/models/test/custom-mesh.obj"></model-obj> -->
-                <model-obj id="model" src="static/models/test/custom-mesh.obj" :lights="lights"></model-obj>
+                <model-obj id="model" :src=this.obj :lights="lights"></model-obj>
               </div>
             </div>
           </el-col>
@@ -28,8 +28,8 @@
             <div class="right">
               <h4  style="color: #b76361"><font-awesome-icon class="icon" :icon="['fas', 'flag']"></font-awesome-icon>【免费查看下载模型】</h4>
               <h4><font-awesome-icon class="icon" :icon="['fas', 'clock']"></font-awesome-icon><span>发布时间：</span>{{model.time}}</h4>
-              <h4><font-awesome-icon class="icon" :icon="['fas', 'address-card']"></font-awesome-icon><span>模型名称:</span>{{model.project_name}}</h4>
-              <h4><font-awesome-icon class="icon" :icon="['fas', 'home']"></font-awesome-icon><span>用户:</span>{{model.share_username}}</h4>
+              <h4><font-awesome-icon class="icon" :icon="['fas', 'address-card']"></font-awesome-icon><span>模型名称:</span>{{model.projectName}}</h4>
+              <h4><font-awesome-icon class="icon" :icon="['fas', 'home']"></font-awesome-icon><span>用户:</span>{{model.userId}}</h4>
               <h4 style="color: #ff6c3c;"><font-awesome-icon class="icon" :icon="['fas', 'location-arrow']"></font-awesome-icon>{{model.from}}></h4>
               <h4><font-awesome-icon class="icon" :icon="['fas', 'user']"></font-awesome-icon><span>类型：</span>{{model.type}}</h4>
               <h4><font-awesome-icon class="icon" :icon="['fas', 'phone']"></font-awesome-icon><span>联系电话：</span> {{model.phone}}</h4>
@@ -45,7 +45,7 @@
           <el-col :span="24">
             <div class="content">
               <h3>详细描述</h3>
-              <p>{{model.desc}}</p>
+              <p>{{model.description}}</p>
               <!-- <span class="alert"><font-awesome-icon class="icon" :icon="['fas', 'exclamation-triangle']"></font-awesome-icon>安全提示：请不要相信任何需要金钱交易的无偿领养！例如宠物免费，骗取运费等常见骗术！</span> -->
             </div>
           </el-col>
@@ -84,11 +84,16 @@ export default {
         time: '2022-08-04',
         share_username: 'toro180',
         type: '文物',
-        desc: 'xxxxxxxxxxxxxxxxxxxxxxxxxxx'
-      }
+        desc: 'xxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        obj: 'static/models/test/custom-mesh.obj'
+      },
+      obj: ''
     }
   },
   methods: {
+    switchBtn () {
+      this.obj = 'static/models/test/custom-mesh.obj'
+    },
     handleBtn () {
       const tokenStr = window.sessionStorage.getItem('token')
       if (!tokenStr) {
@@ -110,14 +115,35 @@ export default {
     }
   },
   created () {
-    console.log('ddddd' + process.env.BASE_URL)
-    this.$http.get('square/models/display?mid=' + this.$route.params.id)
+    this.$http.get('http://127.0.0.1:5000/square/models/display?projectid=' + this.$route.params.id)
       .then(res => {
         const data = res.data
-        console.log(data)
-        if (data.status === 200) {
-          this.model = data.model
-          // this.model.pic = require('../../../assets/images/pet' + data.pet.pic + '.jpg')
+        if (data.success) {
+          this.model = data.msg[0]
+          this.$http.get('http://127.0.0.1:5000/workshop/obj?projectid=' + this.$route.params.id, {
+            responseType: 'blob'
+          }).then(res => {
+            const blob = new Blob([res.data], { type: 'obj' })
+            console.log(blob)
+            const url = window.URL.createObjectURL(blob)
+            console.log(url)
+            // const anchor = document.createElement('a')
+            // if ('download' in anchor) {
+            //   anchor.style.visibility = 'hidden'
+            //   anchor.href = url
+            //   anchor.download = 'temp.obj'
+            //   document.body.appendChild(anchor)
+            //   const evt = document.createEvent('MouseEvents')
+            //   evt.initEvent('click', true, true)
+            //   anchor.dispatchEvent(evt)
+            //   document.body.removeChild(anchor)
+            // } else if (navigator.msSaveBlob) {
+            //   navigator.msSaveBlob(blob, 'temp.obj')
+            // } else {
+            //   location.href = url
+            // } // 移除链接释放资源
+            this.obj = url
+          })
         }
       }, error => console.log(error))
   }

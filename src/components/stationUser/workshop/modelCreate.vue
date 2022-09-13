@@ -97,7 +97,7 @@ export default {
       }
     },
     file_upload (resp) {
-      if (resp.msg === '上传文件成功') {
+      if (resp.code) {
         this.form.file_path = resp.filePath
         Message({
           message: resp.msg,

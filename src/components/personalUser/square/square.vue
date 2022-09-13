@@ -14,11 +14,11 @@
         <el-col :md="22" :offset="1">
             <div class="content clearfix ">
                 <ul >
-                  <li v-for="(model,index) in this.models" :key="index" class="item-block shadow" @click="postDetailBtn(model.id)">
+                  <li v-for="(model,index) in this.models" :key="index" class="item-block shadow" @click="postDetailBtn(model. projectid)">
                     <div class="item-card">
                       <div class="item-main">
                         <a href="###" >
-                          <img  :src="model.pic"/>
+                          <img  :src="pics[index]"/>
                         </a>
                       </div>
                       <div class="item-info">
@@ -70,7 +70,8 @@ export default {
         {
           id: '6', name: '', type: '', share_username: '', content: '2', pic: ''
         }
-      ]
+      ],
+      pics: []
     }
   },
   methods: {
@@ -87,15 +88,21 @@ export default {
     }
   },
   created () {
-    this.$http.get('/square/models/getAll')
+    this.$http.get('http://127.0.0.1:5000//square/models/getAll')
       .then(res => {
         const data = res.data
         console.log(data)
-        if (data.status === 200) {
-          this.models = data.models
-          for (var i = 0; i < this.pets.length; i++) {
-            this.pets[i].pic = require('../../../assets/images/pet' + data.pets[i].pic + '.jpg')
-            // console.log(this.pets)
+        if (data.success) {
+          this.models = data.msg
+          for (var i = 0; i < this.models.length; i++) {
+            this.$http.get('/workshop/pic?userid=' + this.models[i].userId +
+            '&projectName=' + this.models[i].projectname, {
+              responseType: 'blob'
+            }).then(res => {
+              const blob = new Blob([res.data], { type: 'image/jpeg' })
+              const url = window.URL.createObjectURL(blob)
+              this.pics.push(url)
+            })
           }
         }
       }, error => console.log(error))
