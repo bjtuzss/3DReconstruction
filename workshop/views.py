@@ -55,9 +55,8 @@ def upload():
 
 @workshop_blue.route('/models/getAll', methods=['GET'])
 def getAll():
-    data = request.json
-    userid = data.get('userid')
-    res = db.getAll(userid)
+    username = request.args.get("username")
+    res = db.getAll(username)
     if res != 'error':
         code = True
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))

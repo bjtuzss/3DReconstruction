@@ -4,21 +4,21 @@ from flask import jsonify
 import time
 import datetime
 import uuid
-
-"""
-接口说明：
-1.返回的是json数据
-2.结构如下
-{
-    code： 0, # 非0即错误 1
-    data： # 数据
-    message： '对本次请求的说明'
-}
-"""
+import base64
 
 
 # 把数据封装为json格式
 def get_json(c, d, m):
+    """
+    接口说明：
+    1.返回的是json数据
+    2.结构如下
+    {
+        code： 0, # 非0即错误 1
+        data： # 数据
+        message： '对本次请求的说明'
+    }
+    """
     return jsonify({
         'success': c,
         'time': d,
@@ -58,7 +58,6 @@ def resp_file_upload(requ_data, filePath):
                 'code': 1}
 
 
-
 # 检查路径是否存在
 def fileExit(filePath):
     if not os.path.exists(filePath):
@@ -67,4 +66,5 @@ def fileExit(filePath):
 
 # 测试
 if __name__ == '__main__':
-    print(getShortId())
+    img = os.listdir(os.getcwd() + './results/zk_scan1'[1:])[0]
+    print(os.getcwd() + './results/zk_scan1'[1:] + '/' + img)

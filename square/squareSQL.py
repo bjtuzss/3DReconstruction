@@ -22,7 +22,7 @@ class DatabaseContract(object):
 
     def getAll(self):  # 获得所有已分享模型
         try:
-            sql = "select projectid, projectname, imgdir, type from projects where share = 1"
+            sql = "select * from projects where share = 1"
             print(sql)
             self.cursor.execute(sql)
             data = self.cursor.fetchall()
@@ -44,7 +44,7 @@ class DatabaseContract(object):
 
     def display(self, projectid):  # 获得所有已分享模型
         try:
-            sql = "select * from projects where share = 1 and projectId = '" + projectid +"'"
+            sql = "select * from projects where projectId = '" + projectid +"'"
             print(sql)
             self.cursor.execute(sql)
             data = self.cursor.fetchall()
