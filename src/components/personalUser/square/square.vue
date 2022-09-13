@@ -14,11 +14,11 @@
         <el-col :md="22" :offset="1">
             <div class="content clearfix ">
                 <ul >
-                  <li v-for="(model,index) in this.models" :key="index" class="item-block shadow" @click="postDetailBtn(model.id)">
+                  <li v-for="(model,index) in this.models" :key="index" class="item-block shadow" @click="postDetailBtn(model.id, model.name)">
                     <div class="item-card">
                       <div class="item-main">
                         <a href="###" >
-                          <img  :src="model.pic"/>
+                          <img  :src="model.pic" alt="暂时无法显示"/>
                         </a>
                       </div>
                       <div class="item-info">
@@ -46,41 +46,15 @@ export default {
   name: '',
   data () {
     return {
-      models: [
-        {
-          id: '1',
-          name: 'scan1',
-          type: '生活用品',
-          share_username: 'TORO',
-          content: '对DTU数据集中的SCAN1进行三维重建字数补丁字数补丁',
-          pic: require('../../../assets/images/model_example.jpg')
-        },
-        {
-          id: '2', name: '', type: '', share_username: '', content: '2', pic: ''
-        },
-        {
-          id: '3', name: '', type: '', share_username: '', content: '2', pic: ''
-        },
-        {
-          id: '4', name: '', type: '', share_username: '', content: '2', pic: ''
-        },
-        {
-          id: '5', name: '', type: '', share_username: '', content: '2', pic: ''
-        },
-        {
-          id: '6', name: '', type: '', share_username: '', content: '2', pic: ''
-        }
-      ]
+      models: []
     }
   },
   methods: {
-    postDetailBtn (id) {
+    postDetailBtn (id, name) {
       this.$router.push('/index/square/model/' + id)
-      this.$http.get('square/models/display?mid=' + id)
+      this.$http.get('square/models/display?projectid=' + id)
         .then(res => {
-          const data = res.data
-          console.log(data)
-          if (data.status === 200) {
+          if (res.data.success) {
             this.$router.push('/index/square/model/' + id)
           }
         }, error => console.log(error))
@@ -89,14 +63,26 @@ export default {
   created () {
     this.$http.get('/square/models/getAll')
       .then(res => {
-        const data = res.data
-        console.log(data)
-        if (data.status === 200) {
-          this.models = data.models
-          for (var i = 0; i < this.pets.length; i++) {
-            this.pets[i].pic = require('../../../assets/images/pet' + data.pets[i].pic + '.jpg')
-            // console.log(this.pets)
+        const data = res.data.msg
+        console.log(res.data)
+        if (res.data.success) {
+          const tempList = []
+          for (let i = 0; i < data.length; i++) {
+            const temp = {}
+            temp.id = data[i].projectId
+            temp.name = data[i].projectName
+            temp.type = data[i].type
+            temp.share_username = data[i].userId
+            temp.content = data[i].describtion
+            this.$http.get('/square/getPic?path=' + data[i].imgdir)
+              .then(res => {
+                if (res.status === 200) {
+                  temp.pic = 'data:;base64,' + res.data
+                }
+              }, error => console.log(error))
+            tempList.push(temp)
           }
+          this.models = tempList
         }
       }, error => console.log(error))
   }

@@ -47,7 +47,7 @@
       <!-- about3 -重建流程-->
       <div class="about3">
         <h3>重建流程</h3>
-        <h5>XXXXXXXXXXXXXXXXXXXXXXX</h5>
+        <h5>“手机手机影像--创建项目--上传照片--云上3D建模--下载模型”</h5>
         <el-row>
           <el-col :md="4" v-for="(o,index) in flow" :key="index" :offset="index>0 ? 1:3">
             <el-card :body-style="{ padding: '0px' }" shadow="never">

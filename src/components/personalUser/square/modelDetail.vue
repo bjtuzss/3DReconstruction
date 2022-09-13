@@ -27,12 +27,11 @@
           <el-col :span="6">
             <div class="right">
               <h4  style="color: #b76361"><font-awesome-icon class="icon" :icon="['fas', 'flag']"></font-awesome-icon>【免费查看下载模型】</h4>
-              <h4><font-awesome-icon class="icon" :icon="['fas', 'clock']"></font-awesome-icon><span>发布时间：</span>{{model.time}}</h4>
-              <h4><font-awesome-icon class="icon" :icon="['fas', 'address-card']"></font-awesome-icon><span>模型名称:</span>{{model.project_name}}</h4>
-              <h4><font-awesome-icon class="icon" :icon="['fas', 'home']"></font-awesome-icon><span>用户:</span>{{model.share_username}}</h4>
-              <h4 style="color: #ff6c3c;"><font-awesome-icon class="icon" :icon="['fas', 'location-arrow']"></font-awesome-icon>{{model.from}}></h4>
+              <h4><font-awesome-icon class="icon" :icon="['fas', 'clock']"></font-awesome-icon><span>发布时间：</span>{{GMTToStr(model.createTime)}}</h4>
+              <h4><font-awesome-icon class="icon" :icon="['fas', 'address-card']"></font-awesome-icon><span>模型名称:</span>{{model.projectName}}</h4>
+              <h4><font-awesome-icon class="icon" :icon="['fas', 'home']"></font-awesome-icon><span>用户:</span>{{model.userId}}</h4>
               <h4><font-awesome-icon class="icon" :icon="['fas', 'user']"></font-awesome-icon><span>类型：</span>{{model.type}}</h4>
-              <h4><font-awesome-icon class="icon" :icon="['fas', 'phone']"></font-awesome-icon><span>联系电话：</span> {{model.phone}}</h4>
+<!--              <h4><font-awesome-icon class="icon" :icon="['fas', 'phone']"></font-awesome-icon><span>联系电话：</span> {{model.phone}}</h4>-->
               <!-- <el-button type="primary" @click="handleBtn"><font-awesome-icon :icon="['fas', 'paw']"></font-awesome-icon><span>我想领养它</span></el-button> -->
               <el-alert title="鼠标拖拽任意旋转模型" :closable="false" type="success"></el-alert>
               <el-alert title="滚轮滑动对模型进行缩放" :closable="false" type="success"></el-alert>
@@ -45,7 +44,7 @@
           <el-col :span="24">
             <div class="content">
               <h3>详细描述</h3>
-              <p>{{model.desc}}</p>
+              <p>{{model.describtion}}</p>
               <!-- <span class="alert"><font-awesome-icon class="icon" :icon="['fas', 'exclamation-triangle']"></font-awesome-icon>安全提示：请不要相信任何需要金钱交易的无偿领养！例如宠物免费，骗取运费等常见骗术！</span> -->
             </div>
           </el-col>
@@ -62,6 +61,7 @@
 
 <script>
 import { ModelObj } from 'vue-3d-model'
+
 export default {
   components: { ModelObj },
   name: '',
@@ -89,6 +89,15 @@ export default {
     }
   },
   methods: {
+    GMTToStr (time) {
+      const date = new Date(time)
+      return date.getFullYear() + '-' +
+        (date.getMonth() + 1) + '-' +
+        date.getDate() + ' ' +
+        date.getHours() + ':' +
+        date.getMinutes() + ':' +
+        date.getSeconds()
+    },
     handleBtn () {
       const tokenStr = window.sessionStorage.getItem('token')
       if (!tokenStr) {
@@ -111,13 +120,12 @@ export default {
   },
   created () {
     console.log('ddddd' + process.env.BASE_URL)
-    this.$http.get('square/models/display?mid=' + this.$route.params.id)
+    this.$http.get('square/models/display?projectid=' + this.$route.params.id)
       .then(res => {
-        const data = res.data
+        const data = res.data.msg[0]
         console.log(data)
-        if (data.status === 200) {
-          this.model = data.model
-          // this.model.pic = require('../../../assets/images/pet' + data.pet.pic + '.jpg')
+        if (res.data.success) {
+          this.model = data
         }
       }, error => console.log(error))
   }

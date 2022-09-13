@@ -20,7 +20,7 @@
           <el-menu-item v-show="!loginOrNot" index="5-3">立即登录</el-menu-item>
         </el-submenu>
         <el-menu-item index="4">联系我们</el-menu-item>
-        <el-menu-item index="3">交流论坛</el-menu-item>
+<!--        <el-menu-item index="3">交流论坛</el-menu-item>-->
         <el-menu-item index="2">模型广场</el-menu-item>
         <el-menu-item index="1">首页</el-menu-item>
       </el-menu>
