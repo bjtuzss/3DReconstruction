@@ -66,5 +66,5 @@ def fileExit(filePath):
 
 # 测试
 if __name__ == '__main__':
-    img = os.listdir(os.getcwd() + './results/zk_scan1'[1:])[0]
-    print(os.getcwd() + './results/zk_scan1'[1:] + '/' + img)
+    img = os.listdir(os.getcwd() + './results/zk_scan7'[1:])[0]
+    print(os.getcwd() + './results/zk_scan7'[1:] + '/' + img)

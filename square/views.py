@@ -68,8 +68,8 @@ def findpic():
 
 # 测试
 if __name__ == '__main__':
-    img = os.listdir(os.path.dirname(os.getcwd()) + './results/zk_scan1'[1:])[0]
-    img_url = os.path.dirname(os.getcwd()) + './results/zk_scan1'[1:] + '/' + img
+    img = os.listdir(os.path.dirname(os.getcwd()) + './results/zk_scan7'[1:])[0]
+    img_url = os.path.dirname(os.getcwd()) + './results/zk_scan7'[1:] + '/' + img
     f = open(img_url, 'rb')
     base64_str = base64.b64encode(f.read())
     print(base64_str)

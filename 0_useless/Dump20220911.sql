@@ -101,7 +101,7 @@ CREATE TABLE `projects` (
 
 LOCK TABLES `projects` WRITE;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
-INSERT INTO `projects` VALUES ('63101d0d','scan1','zk','','','0',NULL,1,'古建筑',NULL),('63101d12','scan2','zk','','',NULL,NULL,0,NULL,NULL),('63101d28','scan3','zss','','','0',NULL,1,'古建筑',NULL),('631c017a','scan7','zk','','','文物','./results/zk_scan1',0,'巴拉巴拉','2022-09-10'),('631d42c8','手残1','zk','','','000','./results/zk_手残1',0,'123','2022-09-11');
+INSERT INTO `projects` VALUES ('63101d0d','scan1','zk','','','0',NULL,1,'古建筑',NULL),('63101d12','scan2','zk','','',NULL,NULL,0,NULL,NULL),('63101d28','scan3','zss','','','0',NULL,1,'古建筑',NULL),('631c017a','scan7','zk','','','文物','./results/zk_scan7',0,'巴拉巴拉','2022-09-10'),('631d42c8','手残1','zk','','','000','./results/zk_手残1',0,'123','2022-09-11');
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;
 

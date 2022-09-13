@@ -1,7 +1,8 @@
 # user模块
 import datetime
+import os
 
-from flask import request, jsonify
+from flask import request, jsonify, send_file
 from utils import get_json, creatUniqueCode, resp_file_upload, fileExit
 from workshop import workshop_blue
 import workshopSQL as database
@@ -122,3 +123,13 @@ def share():
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         message = '模型分享失败'
     return get_json(code, data, message)
+
+
+@workshop_blue.route('/pic', methods=['POST', 'GET'])
+def return_sample_pic():
+    userid, projectName = request.args.get('userid'), request.args.get('projectName')
+    path = './results/' + userid + '_' + projectName
+    image = os.listdir(os.getcwd() + path[1:])[0]
+    url = os.getcwd() + path[1:] + '/' + image
+    print(url)
+    return send_file(url, mimetype='image/jpeg')
