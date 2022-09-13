@@ -75,13 +75,11 @@ export default {
     }
   },
   methods: {
-    postDetailBtn (id) {
+    postDetailBtn (id, name) {
       this.$router.push('/index/square/model/' + id)
-      this.$http.get('square/models/display?mid=' + id)
+      this.$http.get('square/models/display?projectid=' + id)
         .then(res => {
-          const data = res.data
-          console.log(data)
-          if (data.status === 200) {
+          if (res.data.success) {
             this.$router.push('/index/square/model/' + id)
           }
         }, error => console.log(error))
@@ -104,6 +102,7 @@ export default {
               this.pics.push(url)
             })
           }
+          this.models = tempList
         }
       }, error => console.log(error))
   }

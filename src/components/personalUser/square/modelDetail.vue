@@ -32,7 +32,7 @@
               <h4><font-awesome-icon class="icon" :icon="['fas', 'home']"></font-awesome-icon><span>用户:</span>{{model.userId}}</h4>
               <h4 style="color: #ff6c3c;"><font-awesome-icon class="icon" :icon="['fas', 'location-arrow']"></font-awesome-icon>{{model.from}}></h4>
               <h4><font-awesome-icon class="icon" :icon="['fas', 'user']"></font-awesome-icon><span>类型：</span>{{model.type}}</h4>
-              <h4><font-awesome-icon class="icon" :icon="['fas', 'phone']"></font-awesome-icon><span>联系电话：</span> {{model.phone}}</h4>
+<!--              <h4><font-awesome-icon class="icon" :icon="['fas', 'phone']"></font-awesome-icon><span>联系电话：</span> {{model.phone}}</h4>-->
               <!-- <el-button type="primary" @click="handleBtn"><font-awesome-icon :icon="['fas', 'paw']"></font-awesome-icon><span>我想领养它</span></el-button> -->
               <el-alert title="鼠标拖拽任意旋转模型" :closable="false" type="success"></el-alert>
               <el-alert title="滚轮滑动对模型进行缩放" :closable="false" type="success"></el-alert>
@@ -62,6 +62,7 @@
 
 <script>
 import { ModelObj } from 'vue-3d-model'
+
 export default {
   components: { ModelObj },
   name: '',
