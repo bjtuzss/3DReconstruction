@@ -90,17 +90,3 @@ class DatabaseContract(object):
             return 'error'
         else:
             return 'ok'
-
-    def sav2(self, ply, projectId):  # 模型分享到模型广场
-        try:
-            sql = "update projects set ply = '" + ply + "' where projectId = '" + projectId + "'"
-            print(sql)
-            self.cursor.execute(sql)
-            self.conn.commit()
-        except:
-            self.conn.rollback()
-            return 'error'
-        else:
-            return 'ok'
-
-
