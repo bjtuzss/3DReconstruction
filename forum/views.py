@@ -2,9 +2,8 @@
 from flask import request
 from utils import get_json
 from forum import forum_blue
-import forumSQL as database
+from SQLs import forumSQL as database
 import time
-import json
 
 db = database.DatabaseContract()
 

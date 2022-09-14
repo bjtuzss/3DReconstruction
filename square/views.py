@@ -6,7 +6,7 @@ from flask import request
 
 from utils import get_json
 from square import square_blue
-import squareSQL as database
+from SQLs import squareSQL as database
 import time
 
 db = database.DatabaseContract()

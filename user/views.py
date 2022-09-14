@@ -1,8 +1,10 @@
 # user模块
+import sys
+sys.path.append("~/user/userSQL.py")
 from flask import request
 from utils import get_json, getShortId
 from user import user_blue
-import userSQL as database
+from SQLs import userSQL as database
 import time
 
 db = database.DatabaseContract()

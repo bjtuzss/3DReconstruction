@@ -3,9 +3,9 @@ import datetime
 import os
 
 from flask import request, jsonify, send_file
-from utils import get_json, creatUniqueCode, resp_file_upload, fileExit
+from utils import get_json, creatUniqueCode, resp_file_upload
 from workshop import workshop_blue
-import workshopSQL as database
+from SQLs import workshopSQL as database
 import time
 
 db = database.DatabaseContract()
@@ -131,5 +131,13 @@ def return_sample_pic():
     path = './results/' + userid + '_' + projectName
     image = os.listdir(os.getcwd() + path[1:])[0]
     url = os.getcwd() + path[1:] + '/' + image
+    print(url)
+    return send_file(url, mimetype='image/jpeg')
+
+
+@workshop_blue.route('/obj', methods=['POST', 'GET'])
+def return_sample_pic():
+    projectId, path = request.args.get('projectId'), request.args.get('path')
+    url = os.listdir(os.getcwd() + path[1:])
     print(url)
     return send_file(url, mimetype='image/jpeg')
