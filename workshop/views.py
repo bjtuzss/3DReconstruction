@@ -140,4 +140,4 @@ def return_sample_obj():
     projectId, path = request.args.get('projectId'), request.args.get('path')
     url = os.listdir(os.getcwd() + path[1:])
     print(url)
-    return send_file(url, mimetype='image/jpeg')
+    return send_file(url, mimetype='obj')
