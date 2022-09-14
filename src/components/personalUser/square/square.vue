@@ -8,7 +8,6 @@
         </el-col>
       </el-row>
     </header>
-
     <div class="main">
       <el-row>
         <el-col :md="22" :offset="1">
@@ -56,7 +55,12 @@ export default {
           pic: require('../../../assets/images/model_example.jpg')
         },
         {
-          id: '2', name: '', type: '', share_username: '', content: '2', pic: ''
+          id: '2',
+          name: 'scan4',
+          type: '生活用品',
+          share_username: 'TORO',
+          content: '对DTU数据集中的SCAN1进行三维重建字数补丁字数补丁',
+          pic: require('../../../assets/images/model_example.jpg')
         },
         {
           id: '3', name: '', type: '', share_username: '', content: '2', pic: ''
@@ -102,7 +106,6 @@ export default {
               this.pics.push(url)
             })
           }
-          this.models = tempList
         }
       }, error => console.log(error))
   }

@@ -125,7 +125,6 @@ export default {
               this.pics.push(url)
             })
           }
-          this.models = tempList
         }
       }, error => console.log(error))
   }
