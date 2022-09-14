@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="title">
     欢迎来到3D Resturction我的工作台
   </div>
 </template>
@@ -11,5 +11,8 @@ export default {
 </script>
 
 <style scoped>
-
+.title {
+  margin: 0 auto;
+  text-align:center;
+}
 </style>

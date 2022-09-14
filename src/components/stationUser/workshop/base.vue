@@ -5,7 +5,7 @@
         <span class="favicon">3D Resturction</span>
         <span class="title">我的工作台</span>
       </div>
-      <el-button type="info" @click="quitBtnHandle">退出</el-button>
+      <el-button type="info" @click="quitBtnHandle">返回主界面</el-button>
     </el-header>
     <el-container>
       <el-aside width="200px">
