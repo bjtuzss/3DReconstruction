@@ -52,3 +52,14 @@ class DatabaseContract(object):
             return 'error'
         else:
             return 'ok'
+
+    def visitorMessage(self, visitorName, email, content):  # 联系人
+        try:
+            sql = "insert into visitors values('" + visitorName + "','" + email + "','" + content + "')"
+            self.cursor.execute(sql)
+            self.conn.commit()
+        except:
+            self.conn.rollback()
+            return 'error'
+        else:
+            return 'ok'

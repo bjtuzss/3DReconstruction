@@ -1,6 +1,4 @@
 # user模块
-import sys
-sys.path.append("~/user/userSQL.py")
 from flask import request
 from utils import get_json, getShortId
 from user import user_blue
