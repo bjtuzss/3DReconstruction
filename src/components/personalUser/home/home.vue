@@ -188,7 +188,7 @@ export default {
       }
     },
     onSubmit () {
-      this.$http.post('visitorMessage', this.form)
+      this.$http.post('/user/visitorMessage', this.form)
         .then(res => {
           const data = res.data
           console.log(data)

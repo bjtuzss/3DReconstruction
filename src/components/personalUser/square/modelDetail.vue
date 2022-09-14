@@ -27,10 +27,10 @@
           <el-col :span="6">
             <div class="right">
               <h4  style="color: #b76361"><font-awesome-icon class="icon" :icon="['fas', 'flag']"></font-awesome-icon>【免费查看下载模型】</h4>
-              <h4><font-awesome-icon class="icon" :icon="['fas', 'clock']"></font-awesome-icon><span>发布时间：</span>{{model.time}}</h4>
+              <h4><font-awesome-icon class="icon" :icon="['fas', 'clock']"></font-awesome-icon><span>发布时间：</span>{{model.createTime}}</h4>
               <h4><font-awesome-icon class="icon" :icon="['fas', 'address-card']"></font-awesome-icon><span>模型名称:</span>{{model.projectName}}</h4>
               <h4><font-awesome-icon class="icon" :icon="['fas', 'home']"></font-awesome-icon><span>用户:</span>{{model.userId}}</h4>
-              <h4 style="color: #ff6c3c;"><font-awesome-icon class="icon" :icon="['fas', 'location-arrow']"></font-awesome-icon>{{model.from}}></h4>
+<!--              <h4 style="color: #ff6c3c;"><font-awesome-icon class="icon" :icon="['fas', 'location-arrow']"></font-awesome-icon>{{model.from}}></h4>-->
               <h4><font-awesome-icon class="icon" :icon="['fas', 'user']"></font-awesome-icon><span>类型：</span>{{model.type}}</h4>
 <!--              <h4><font-awesome-icon class="icon" :icon="['fas', 'phone']"></font-awesome-icon><span>联系电话：</span> {{model.phone}}</h4>-->
               <!-- <el-button type="primary" @click="handleBtn"><font-awesome-icon :icon="['fas', 'paw']"></font-awesome-icon><span>我想领养它</span></el-button> -->
@@ -115,39 +115,43 @@ export default {
       }
     }
   },
-  // created () {
-  //   this.$http.get('http://127.0.0.1:5000/square/models/display?projectid=' + this.$route.params.id)
-  //     .then(res => {
-  //       const data = res.data
-  //       if (data.success) {
-  //         this.model = data.msg[0]
-  //         this.$http.get('http://127.0.0.1:5000/workshop/obj?projectid=' + this.$route.params.id, {
-  //           responseType: 'blob'
-  //         }).then(res => {
-  //           const blob = new Blob([res.data], { type: 'obj' })
-  //           console.log(blob)
-  //           const url = window.URL.createObjectURL(blob)
-  //           console.log(url)
-  //           // const anchor = document.createElement('a')
-  //           // if ('download' in anchor) {
-  //           //   anchor.style.visibility = 'hidden'
-  //           //   anchor.href = url
-  //           //   anchor.download = 'temp.obj'
-  //           //   document.body.appendChild(anchor)
-  //           //   const evt = document.createEvent('MouseEvents')
-  //           //   evt.initEvent('click', true, true)
-  //           //   anchor.dispatchEvent(evt)
-  //           //   document.body.removeChild(anchor)
-  //           // } else if (navigator.msSaveBlob) {
-  //           //   navigator.msSaveBlob(blob, 'temp.obj')
-  //           // } else {
-  //           //   location.href = url
-  //           // } // 移除链接释放资源
-  //           this.obj = url
-  //         })
-  //       }
-  //     }, error => console.log(error))
-  // }
+  created () {
+    this.$http.get('http://127.0.0.1:5000/square/models/display?projectid=' + this.$route.params.id)
+      .then(res => {
+        const data = res.data
+        if (data.success) {
+          this.model = data.msg[0]
+          console.log('this.model')
+          console.log(this.model)
+          this.$http.get('http://127.0.0.1:5000/workshop/obj?projectid=' + this.$route.params.id +
+            '&path=' + this.models.ply, {
+            responseType: 'blob'
+          }).then(res => {
+            const blob = new Blob([res.data], { type: 'obj' })
+            console.log('blob')
+            console.log(blob)
+            const url = window.URL.createObjectURL(blob)
+            console.log(url)
+            // const anchor = document.createElement('a')
+            // if ('download' in anchor) {
+            //   anchor.style.visibility = 'hidden'
+            //   anchor.href = url
+            //   anchor.download = 'temp.obj'
+            //   document.body.appendChild(anchor)
+            //   const evt = document.createEvent('MouseEvents')
+            //   evt.initEvent('click', true, true)
+            //   anchor.dispatchEvent(evt)
+            //   document.body.removeChild(anchor)
+            // } else if (navigator.msSaveBlob) {
+            //   navigator.msSaveBlob(blob, 'temp.obj')
+            // } else {
+            //   location.href = url
+            // } // 移除链接释放资源
+            this.obj = url
+          })
+        }
+      }, error => console.log(error))
+  }
 }
 
 </script>

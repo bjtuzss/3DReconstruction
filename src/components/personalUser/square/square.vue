@@ -13,7 +13,7 @@
         <el-col :md="22" :offset="1">
             <div class="content clearfix ">
                 <ul >
-                  <li v-for="(model,index) in this.models" :key="index" class="item-block shadow" @click="postDetailBtn(model. projectid)">
+                  <li v-for="(model,index) in this.models" :key="index" class="item-block shadow" @click="postDetailBtn(model.projectId)">
                     <div class="item-card">
                       <div class="item-main">
                         <a href="###" >
@@ -22,11 +22,11 @@
                       </div>
                       <div class="item-info">
                         <div class="item-info1">
-                          <span><strong>{{model.name}}</strong></span>
+                          <span><strong>{{model.projectName}}</strong></span>
                           <span style="float:right">{{model.type}}</span>
                         </div>
                         <div class="item-info2">
-                          <p>{{model.content}}</p>
+                          <p>{{model.describtion}}</p>
                         </div>
                       </div>
                     </div>
@@ -79,7 +79,7 @@ export default {
     }
   },
   methods: {
-    postDetailBtn (id, name) {
+    postDetailBtn (id) {
       this.$router.push('/index/square/model/' + id)
       this.$http.get('square/models/display?projectid=' + id)
         .then(res => {
@@ -93,12 +93,11 @@ export default {
     this.$http.get('http://127.0.0.1:5000//square/models/getAll')
       .then(res => {
         const data = res.data
-        console.log(data)
         if (data.success) {
           this.models = data.msg
-          for (var i = 0; i < this.models.length; i++) {
+          for (let i = 0; i < this.models.length; i++) {
             this.$http.get('/workshop/pic?userid=' + this.models[i].userId +
-            '&projectName=' + this.models[i].projectname, {
+            '&projectName=' + this.models[i].projectName, {
               responseType: 'blob'
             }).then(res => {
               const blob = new Blob([res.data], { type: 'image/jpeg' })
