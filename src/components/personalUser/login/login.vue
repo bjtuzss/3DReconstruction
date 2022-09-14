@@ -112,7 +112,7 @@ export default {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) { return }
         window.sessionStorage.setItem('username', this.loginForm.username)
-        const result = await this.$http.post('http://127.0.0.1:5000/user/login', this.loginForm)
+        const result = await this.$http.post('user/login', this.loginForm)
         console.log(result)
         if (result.data.success) {
           window.sessionStorage.setItem('username', this.loginForm.username)
@@ -128,7 +128,7 @@ export default {
     register () {
       this.$refs.registerFormRef.validate(async valid => {
         if (!valid) { return }
-        const result = await this.$http.post('http://127.0.0.1:5000/user/register', this.registerForm)
+        const result = await this.$http.post('user/register', this.registerForm)
         console.log(result)
         if (result.data.success) {
           console.log(result.data.msg)

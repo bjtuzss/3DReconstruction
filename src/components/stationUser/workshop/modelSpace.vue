@@ -14,16 +14,16 @@
                     <div class="item-card">
                       <div class="item-main">
                         <a href="###" >
-                          <img @click="postDetailBtn(model.projectId)" :src="pics[index]"/>
+                          <img @click="postDetailBtn(model.id)" :src="pics[index]"/>
                         </a>
                       </div>
                       <div class="item-info">
                         <div class="item-info1">
-                          <span><strong>{{model.projectName}}</strong></span>
+                          <span><strong>{{model.name}}</strong></span>
                           <span style="float:right">{{model.type}}</span>
                         </div>
                         <div class="item-info2">
-                          <p>{{model.describtion}}</p>
+                          <p>{{model.description}}</p>
                           <i class="el-icon-share" style="font-size:20px;width: 20%;" @click="shareBtn(model.pro)"></i>
                         </div>
                       </div>
@@ -43,7 +43,31 @@ export default {
   name: '',
   data () {
     return {
-      models: [],
+      models: [
+        {
+          id: '1',
+          name: 'scan1',
+          type: '生活用品',
+          share_username: 'TORO',
+          description: '对DTU数据集中的SCAN1进行三维重建字数补丁字数补丁',
+          pic: require('../../../assets/images/model_example.jpg')
+        },
+        {
+          id: '2', name: '', type: '', share_username: '', content: '2', pic: ''
+        },
+        {
+          id: '3', name: '', type: '', share_username: '', content: '2', pic: ''
+        },
+        {
+          id: '4', name: '', type: '', share_username: '', content: '2', pic: ''
+        },
+        {
+          id: '5', name: '', type: '', share_username: '', content: '2', pic: ''
+        },
+        {
+          id: '6', name: '', type: '', share_username: '', content: '2', pic: ''
+        }
+      ],
       pics: []
     }
   },
@@ -65,7 +89,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$http.post('http://127.0.0.1:5000/workshop/models/share', { userid: window.sessionStorage.getItem('username'), projectName: projectName })
+        this.$http.post('/workshop/models/share', { userid: window.sessionStorage.getItem('username'), projectName: projectName })
           .then(res => {
             const data = res.data
             console.log(data)
@@ -83,7 +107,7 @@ export default {
     }
   },
   created () {
-    this.$http.get('http://127.0.0.1:5000/workshop/models/getAll?username=' + window.sessionStorage.getItem('username'))
+    this.$http.get('/workshop/models/getAll?userid=' + window.sessionStorage.getItem('username'))
       .then(res => {
         const data = res.data
         console.log(data)
@@ -91,6 +115,7 @@ export default {
           console.log(data.msg)
           this.models = data.msg
           for (var i = 0; i < this.models.length; i++) {
+            console.log(this.models[i].imgdir + '/00000000.jpg')
             this.$http.get('/workshop/pic?userid=' + window.sessionStorage.getItem('username') +
             '&projectName=' + this.models[i].projectName, {
               responseType: 'blob'

@@ -90,7 +90,7 @@ export default {
     }
   },
   created () {
-    this.$http.get('http://127.0.0.1:5000//square/models/getAll')
+    this.$http.get('/square/models/getAll')
       .then(res => {
         const data = res.data
         if (data.success) {

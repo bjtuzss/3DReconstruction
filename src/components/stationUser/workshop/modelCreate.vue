@@ -20,7 +20,7 @@
             class="upload-demo"
             accept=".jpeg,.png,.jpg,.bmp,.gif"
             :show-file-list="fileList"
-            action="http://127.0.0.1:5000/workshop/images/upload"
+            action="/workshop/images/upload"
             name="file"
             multiple
             :data="file_info"

@@ -19,8 +19,8 @@
             <div class="left">
               <div class="photo">
                 <!-- <model-obj id="model" src="static/models/test/custom-mesh.obj" :lights="lights"></model-obj> -->
-                <model-obj id="model" src="http://43.143.151.191:888/obj/scan4.obj" :lights="lights"></model-obj>
-                <!-- <model-obj id="model" :src=this.obj :lights="lights"></model-obj> -->
+                <!-- <model-obj id="model" src="http://43.143.151.191:888/obj/scan4.obj" :lights="lights"></model-obj> -->
+                <model-obj id="model" :src=this.obj :lights="lights"></model-obj>
               </div>
             </div>
           </el-col>
@@ -88,7 +88,7 @@ export default {
         desc: 'xxxxxxxxxxxxxxxxxxxxxxxxxxx',
         obj: 'static/models/test/custom-mesh.obj'
       },
-      obj: 'http://43.143.151.191:888/obj/custom-meshed.obj'
+      obj: 'http://43.143.151.191:888/obj/scan4.obj'
     }
   },
   methods: {
@@ -116,14 +116,14 @@ export default {
     }
   },
   created () {
-    this.$http.get('http://127.0.0.1:5000/square/models/display?projectid=' + this.$route.params.id)
+    this.$http.get('square/models/display?projectid=' + this.$route.params.id)
       .then(res => {
         const data = res.data
         if (data.success) {
           this.model = data.msg[0]
           console.log('this.model')
           console.log(this.model)
-          this.$http.get('http://127.0.0.1:5000/workshop/obj?projectid=' + this.$route.params.id +
+          this.$http.get('workshop/obj?projectid=' + this.$route.params.id +
             '&path=' + this.models.ply, {
             responseType: 'blob'
           }).then(res => {
@@ -132,21 +132,6 @@ export default {
             console.log(blob)
             const url = window.URL.createObjectURL(blob)
             console.log(url)
-            // const anchor = document.createElement('a')
-            // if ('download' in anchor) {
-            //   anchor.style.visibility = 'hidden'
-            //   anchor.href = url
-            //   anchor.download = 'temp.obj'
-            //   document.body.appendChild(anchor)
-            //   const evt = document.createEvent('MouseEvents')
-            //   evt.initEvent('click', true, true)
-            //   anchor.dispatchEvent(evt)
-            //   document.body.removeChild(anchor)
-            // } else if (navigator.msSaveBlob) {
-            //   navigator.msSaveBlob(blob, 'temp.obj')
-            // } else {
-            //   location.href = url
-            // } // 移除链接释放资源
             this.obj = url
           })
         }
