@@ -136,7 +136,7 @@ def return_sample_pic():
 
 
 @workshop_blue.route('/obj', methods=['POST', 'GET'])
-def return_sample_pic():
+def return_sample_obj():
     projectId, path = request.args.get('projectId'), request.args.get('path')
     url = os.listdir(os.getcwd() + path[1:])
     print(url)
