@@ -14,7 +14,7 @@
         <el-col :md="22" :offset="1">
             <div class="content clearfix ">
                 <ul >
-                  <li v-for="(model,index) in this.models" :key="index" class="item-block shadow" @click="postDetailBtn(model. projectid)">
+                  <li v-for="(model,index) in this.models" :key="index" class="item-block shadow" @click="postDetailBtn(model.projectId)">
                     <div class="item-card">
                       <div class="item-main">
                         <a href="###" >
@@ -23,11 +23,11 @@
                       </div>
                       <div class="item-info">
                         <div class="item-info1">
-                          <span><strong>{{model.name}}</strong></span>
+                          <span><strong>{{model.projectName}}</strong></span>
                           <span style="float:right">{{model.type}}</span>
                         </div>
                         <div class="item-info2">
-                          <p>{{model.content}}</p>
+                          <p>{{model.describtion}}</p>
                         </div>
                       </div>
                     </div>
@@ -46,36 +46,12 @@ export default {
   name: '',
   data () {
     return {
-      models: [
-        {
-          id: '1',
-          name: 'scan1',
-          type: '生活用品',
-          share_username: 'TORO',
-          content: '对DTU数据集中的SCAN1进行三维重建字数补丁字数补丁',
-          pic: require('../../../assets/images/model_example.jpg')
-        },
-        {
-          id: '2', name: '', type: '', share_username: '', content: '2', pic: ''
-        },
-        {
-          id: '3', name: '', type: '', share_username: '', content: '2', pic: ''
-        },
-        {
-          id: '4', name: '', type: '', share_username: '', content: '2', pic: ''
-        },
-        {
-          id: '5', name: '', type: '', share_username: '', content: '2', pic: ''
-        },
-        {
-          id: '6', name: '', type: '', share_username: '', content: '2', pic: ''
-        }
-      ],
+      models: [],
       pics: []
     }
   },
   methods: {
-    postDetailBtn (id, name) {
+    postDetailBtn (id) {
       this.$router.push('/index/square/model/' + id)
       this.$http.get('square/models/display?projectid=' + id)
         .then(res => {
@@ -89,12 +65,11 @@ export default {
     this.$http.get('http://127.0.0.1:5000//square/models/getAll')
       .then(res => {
         const data = res.data
-        console.log(data)
         if (data.success) {
           this.models = data.msg
-          for (var i = 0; i < this.models.length; i++) {
+          for (let i = 0; i < this.models.length; i++) {
             this.$http.get('/workshop/pic?userid=' + this.models[i].userId +
-            '&projectName=' + this.models[i].projectname, {
+            '&projectName=' + this.models[i].projectName, {
               responseType: 'blob'
             }).then(res => {
               const blob = new Blob([res.data], { type: 'image/jpeg' })
@@ -102,7 +77,6 @@ export default {
               this.pics.push(url)
             })
           }
-          this.models = tempList
         }
       }, error => console.log(error))
   }

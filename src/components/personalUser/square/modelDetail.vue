@@ -20,17 +20,17 @@
               <div class="photo">
                 <!-- <model-obj id="model" src="static/models/bugatti/bugatti.obj" mtl="static/models/bugatti/bugatti.mtl"></model-obj> -->
                 <!-- <model-obj id="model" src="static/models/test/custom-mesh.obj"></model-obj> -->
-                <model-obj id="model" :src=this.obj :lights="lights"></model-obj>
+                <model-obj id="model" src= "http://127.0.0.1:8080/img/luffy.jpg" :lights="lights"></model-obj>
               </div>
             </div>
           </el-col>
           <el-col :span="6">
             <div class="right">
               <h4  style="color: #b76361"><font-awesome-icon class="icon" :icon="['fas', 'flag']"></font-awesome-icon>【免费查看下载模型】</h4>
-              <h4><font-awesome-icon class="icon" :icon="['fas', 'clock']"></font-awesome-icon><span>发布时间：</span>{{model.time}}</h4>
+              <h4><font-awesome-icon class="icon" :icon="['fas', 'clock']"></font-awesome-icon><span>发布时间：</span>{{model.createTime}}</h4>
               <h4><font-awesome-icon class="icon" :icon="['fas', 'address-card']"></font-awesome-icon><span>模型名称:</span>{{model.projectName}}</h4>
               <h4><font-awesome-icon class="icon" :icon="['fas', 'home']"></font-awesome-icon><span>用户:</span>{{model.userId}}</h4>
-              <h4 style="color: #ff6c3c;"><font-awesome-icon class="icon" :icon="['fas', 'location-arrow']"></font-awesome-icon>{{model.from}}></h4>
+<!--              <h4 style="color: #ff6c3c;"><font-awesome-icon class="icon" :icon="['fas', 'location-arrow']"></font-awesome-icon>{{model.from}}></h4>-->
               <h4><font-awesome-icon class="icon" :icon="['fas', 'user']"></font-awesome-icon><span>类型：</span>{{model.type}}</h4>
 <!--              <h4><font-awesome-icon class="icon" :icon="['fas', 'phone']"></font-awesome-icon><span>联系电话：</span> {{model.phone}}</h4>-->
               <!-- <el-button type="primary" @click="handleBtn"><font-awesome-icon :icon="['fas', 'paw']"></font-awesome-icon><span>我想领养它</span></el-button> -->
@@ -121,10 +121,14 @@ export default {
         const data = res.data
         if (data.success) {
           this.model = data.msg[0]
-          this.$http.get('http://127.0.0.1:5000/workshop/obj?projectid=' + this.$route.params.id, {
+          console.log('this.model')
+          console.log(this.model)
+          this.$http.get('http://127.0.0.1:5000/workshop/obj?projectid=' + this.$route.params.id +
+            '&path=' + this.models.ply, {
             responseType: 'blob'
           }).then(res => {
             const blob = new Blob([res.data], { type: 'obj' })
+            console.log('blob')
             console.log(blob)
             const url = window.URL.createObjectURL(blob)
             console.log(url)
