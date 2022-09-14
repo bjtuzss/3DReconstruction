@@ -108,12 +108,10 @@ def delete():
 @workshop_blue.route('/models/share', methods=['POST'])
 def share():
     data = request.json
+    print(data)
     userid = data.get('userid')
-    projectName = data.get('project_name')
-    projectid = data.get('projectid')
-    type= data.get('type')
-    desc = data.get('desc')
-    res = db.share(userid, projectName, projectid, type, desc)
+    projectId = data.get('projectId')
+    res = db.share(userid, projectId)
     if res == 'ok':
         code = True
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))

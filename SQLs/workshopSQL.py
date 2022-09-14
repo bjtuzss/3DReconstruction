@@ -67,9 +67,9 @@ class DatabaseContract(object):
         else:
             return 'ok'
 
-    def share(self, userid, projectName, projectid, type, desc):  # 模型删除
+    def share(self, userid, projectId):  # 模型分享到模型广场
         try:
-            sql = "update projects set type = '" + type + "', share = " + "1, describtion = '" + desc + "' where userId = '" + userid + "' and projectName = '" + projectName + "'"
+            sql = "update projects set share = " + "1 where userId = '" + userid + "' and projectId = '" + projectId + "'"
             print(sql)
             self.cursor.execute(sql)
             self.conn.commit()
@@ -79,6 +79,16 @@ class DatabaseContract(object):
         else:
             return 'ok'
 
-    # def upload(self):
+    def save(self, ply, projectId):  # 模型分享到模型广场
+        try:
+            sql = "update projects set ply = '" + ply + "' where projectId = '" + projectId + "'"
+            print(sql)
+            self.cursor.execute(sql)
+            self.conn.commit()
+        except:
+            self.conn.rollback()
+            return 'error'
+        else:
+            return 'ok'
 
 
