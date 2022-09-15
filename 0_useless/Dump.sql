@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `first_comment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `first_comment` (
   `commentId` int NOT NULL,
   `content` varchar(45) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE `first_comment` (
   PRIMARY KEY (`commentId`),
   KEY `fronUid_idx` (`fromUid`),
   CONSTRAINT `fronUid` FOREIGN KEY (`fromUid`) REFERENCES `user` (`userName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,14 +51,14 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `forum_basic`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `forum_basic` (
   `themeName` int NOT NULL,
   `postNum` int NOT NULL DEFAULT '0',
   `themeType` int NOT NULL DEFAULT '0',
   `remarks` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`themeName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -76,7 +76,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `projects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `projects` (
   `projectId` varchar(8) NOT NULL,
   `projectName` varchar(45) NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE `projects` (
   UNIQUE KEY `projectName_UNIQUE` (`projectName`),
   KEY `userId_idx` (`userId`),
   CONSTRAINT `userId` FOREIGN KEY (`userId`) REFERENCES `user` (`userName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -101,7 +101,7 @@ CREATE TABLE `projects` (
 
 LOCK TABLES `projects` WRITE;
 /*!40000 ALTER TABLE `projects` DISABLE KEYS */;
-INSERT INTO `projects` VALUES ('63101d0d','scan1','zk','','','0',NULL,1,'古建筑',NULL),('63101d12','scan2','zk','','',NULL,NULL,0,NULL,NULL),('63101d28','scan3','zss','','','0',NULL,1,'古建筑',NULL),('631c017a','scan7','zk','','','文物','./results/zk_scan7',0,'巴拉巴拉','2022-09-10'),('631d42c8','手残1','zk','','','000','./results/zk_手残1',0,'123','2022-09-11');
+INSERT INTO `projects` VALUES ('631c017a','scan7','zk','./objs/custom-mesh.obj','','文物','./results/zk_scan1',1,'巴拉巴拉','2022-09-10'),('631d42c8','手残1','zk','','','000','./results/zk_手残1',0,'123','2022-09-11'),('63206db4','111','zk','','','test','./results/zk_111',0,'测试','2022-09-13'),('6321beb4','asd','zk','','','asdf','./results/zk_asd',0,'asdf','2022-09-14');
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -111,7 +111,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `second_comment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `second_comment` (
   `sCommentId` int NOT NULL,
   `fCommentId` int NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE `second_comment` (
   KEY `fromUid2_idx` (`fromUid2`),
   CONSTRAINT `fCommentId` FOREIGN KEY (`fCommentId`) REFERENCES `first_comment` (`commentId`),
   CONSTRAINT `fromUid2` FOREIGN KEY (`fromUid2`) REFERENCES `user` (`userName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -141,7 +141,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!50503 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `userId` varchar(8) NOT NULL,
   `userName` varchar(45) NOT NULL,
@@ -151,7 +151,7 @@ CREATE TABLE `user` (
   `address` varchar(45) DEFAULT NULL,
   `remarks` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`userName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,37 +165,28 @@ INSERT INTO `user` VALUES ('94c75b93','wy','123123','','','',''),('00000002','zk
 UNLOCK TABLES;
 
 --
--- Table structure for table `user2`
+-- Table structure for table `visitors`
 --
 
-DROP TABLE IF EXISTS `user2`;
+DROP TABLE IF EXISTS `visitors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user2` (
-  `userId` varchar(8) NOT NULL,
-  `userName` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
-  `remarks` varchar(45) DEFAULT NULL,
-  `phone` varchar(45) NOT NULL,
-  `wxId` varchar(45) DEFAULT NULL,
-  `address` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`userId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!50503 SET character_set_client = utf8 */;
+CREATE TABLE `visitors` (
+  `vId` varchar(45) NOT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `content` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`vId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user2`
+-- Dumping data for table `visitors`
 --
 
-LOCK TABLES `user2` WRITE;
-/*!40000 ALTER TABLE `user2` DISABLE KEYS */;
-INSERT INTO `user2` VALUES ('0001','G4SS','zss75510101',NULL,'18811710955',NULL,NULL),('0002','zk','123456','','18811710955',NULL,NULL);
-/*!40000 ALTER TABLE `user2` ENABLE KEYS */;
+LOCK TABLES `visitors` WRITE;
+/*!40000 ALTER TABLE `visitors` DISABLE KEYS */;
+/*!40000 ALTER TABLE `visitors` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping routines for database '3ddatabase'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -206,4 +197,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-09-11 10:14:27
+-- Dump completed on 2022-09-14 20:29:59

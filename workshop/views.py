@@ -108,12 +108,10 @@ def delete():
 @workshop_blue.route('/models/share', methods=['POST'])
 def share():
     data = request.json
+    print(data)
     userid = data.get('userid')
-    projectName = data.get('project_name')
-    projectid = data.get('projectid')
-    type= data.get('type')
-    desc = data.get('desc')
-    res = db.share(userid, projectName, projectid, type, desc)
+    projectId = data.get('projectId')
+    res = db.share(userid, projectId)
     if res == 'ok':
         code = True
         data = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
@@ -140,4 +138,4 @@ def return_sample_obj():
     projectId, path = request.args.get('projectId'), request.args.get('path')
     url = os.listdir(os.getcwd() + path[1:])
     print(url)
-    return send_file(url, mimetype='image/jpeg')
+    return send_file(url, mimetype='obj')
