@@ -88,7 +88,7 @@ export default {
         desc: 'xxxxxxxxxxxxxxxxxxxxxxxxxxx',
         obj: 'static/models/test/custom-mesh.obj'
       },
-      obj: 'http://43.143.151.191:888/obj/scan4.obj'
+      obj: 'api/obj/scan4.obj'
     }
   },
   methods: {
