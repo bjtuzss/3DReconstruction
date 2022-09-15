@@ -17,7 +17,7 @@
                     <div class="item-card">
                       <div class="item-main">
                         <a href="###" >
-                          <img  :src="pics[index]"/>
+                          <img  :src="model.imgdir"/>
                         </a>
                       </div>
                       <div class="item-info">
@@ -52,7 +52,7 @@ export default {
           type: '生活用品',
           share_username: 'TORO',
           content: '对DTU数据集中的SCAN1进行三维重建字数补丁字数补丁',
-          pic: require('../../../assets/images/model_example.jpg')
+          imgdir: require('../../../assets/images/model_example.jpg')
         },
         {
           id: '2',
@@ -60,7 +60,7 @@ export default {
           type: '生活用品',
           share_username: 'TORO',
           content: '对DTU数据集中的SCAN1进行三维重建字数补丁字数补丁',
-          pic: require('../../../assets/images/model_example.jpg')
+          imgdir: require('../../../assets/images/model_example.jpg')
         },
         {
           id: '3', name: '', type: '', share_username: '', content: '2', pic: ''
@@ -103,6 +103,7 @@ export default {
               const blob = new Blob([res.data], { type: 'image/jpeg' })
               const url = window.URL.createObjectURL(blob)
               this.pics.push(url)
+              this.models[i].imgdir = url
             })
           }
         }

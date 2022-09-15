@@ -13,7 +13,7 @@
                  <li>Email</li>
                  <li>1097546295@qq.com</li>
                  <li>Location</li>
-                 <li>北下关街道上园村3号16号楼</li>
+                 <li>北下关街道上园村学苑公寓7号楼</li>
                </ul>
              </div>
            </el-col>

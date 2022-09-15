@@ -20,7 +20,7 @@
             class="upload-demo"
             accept=".jpeg,.png,.jpg,.bmp,.gif"
             :show-file-list="fileList"
-            action="/workshop/images/upload"
+            action="http://43.143.151.191:443/workshop/images/upload"
             name="file"
             multiple
             :data="file_info"
@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     async onSubmit () {
-      const result = await this.$http.post('http://127.0.0.1:5000/workshop/project/create', this.form)
+      const result = await this.$http.post('workshop/project/create', this.form)
       if (result.data.success) {
         console.log(result.data.msg)
         this.$message.success(result.data.msg)

@@ -14,7 +14,7 @@
                     <div class="item-card">
                       <div class="item-main">
                         <a href="###" >
-                          <img @click="postDetailBtn(model.id)" :src="pics[index]"/>
+                          <img @click="postDetailBtn(model.projectId)" :src="pics[index]"/>
                         </a>
                       </div>
                       <div class="item-info">
@@ -23,8 +23,9 @@
                           <span style="float:right">{{model.type}}</span>
                         </div>
                         <div class="item-info2">
-                          <p>{{model.description}}</p>
-                          <i class="el-icon-share" style="font-size:20px;width: 20%;" @click="shareBtn(model.pro)"></i>
+                          <p>{{model.describtion}}</p>
+                          <i class="el-icon-share" style="font-size:18px;width: 10%;cursor: pointer;" @click="shareBtn(model.projectId)"></i>
+                          <i class="el-icon-delete" style="font-size:20px;width: 10%;cursor: pointer;" @click="deleteBtn(model.projectId,model.projectName)"></i>
                         </div>
                       </div>
                     </div>
@@ -74,22 +75,14 @@ export default {
   methods: {
     postDetailBtn (id) {
       this.$router.push('/index/square/model/' + id)
-      this.$http.get('square/models/display?mid=' + id)
-        .then(res => {
-          const data = res.data
-          console.log(data)
-          if (data.status === 200) {
-            this.$router.push('/index/square/model/' + id)
-          }
-        }, error => console.log(error))
     },
-    shareBtn (projectName) {
+    shareBtn (projectId) {
       this.$confirm('是否要分享此模型到模型广场?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$http.post('/workshop/models/share', { userid: window.sessionStorage.getItem('username'), projectName: projectName })
+        this.$http.post('/workshop/models/share', { userid: window.sessionStorage.getItem('username'), projectId: projectId })
           .then(res => {
             const data = res.data
             console.log(data)
@@ -104,10 +97,37 @@ export default {
           message: '已取消分享'
         })
       })
+    },
+    // eslint-disable-next-line camelcase
+    deleteBtn (projectId, project_name) {
+      this.$confirm('是否要删除此模型?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$http.post('/workshop/models/delete', {
+          userid: window.sessionStorage.getItem('username'),
+          projectid: projectId,
+          project_name: project_name
+})
+          .then(res => {
+            const data = res.data
+            console.log(data)
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          }, error => console.log(error))
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
   },
   created () {
-    this.$http.get('/workshop/models/getAll?userid=' + window.sessionStorage.getItem('username'))
+    this.$http.get('/workshop/models/getAll?username=' + window.sessionStorage.getItem('username'))
       .then(res => {
         const data = res.data
         console.log(data)

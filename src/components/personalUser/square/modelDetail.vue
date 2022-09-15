@@ -12,7 +12,8 @@
     <!--主体部分-->
     <el-row>
       <el-col :span="22" :offset="1" class="main">
-        <h3>{{model.title}}</h3><button @click="switchBtn" style="margin-left:20px">点击选择模型</button>
+        <h3>{{model.title}}</h3>
+        <!-- <button @click="switchBtn" style="margin-left:20px">点击选择模型</button> -->
         <!--上半部分-->
         <el-row :gutter="10">
           <el-col :span="18">
@@ -45,7 +46,7 @@
           <el-col :span="24">
             <div class="content">
               <h3>详细描述</h3>
-              <p>{{model.description}}</p>
+              <p>{{model.describtion}}</p>
               <!-- <span class="alert"><font-awesome-icon class="icon" :icon="['fas', 'exclamation-triangle']"></font-awesome-icon>安全提示：请不要相信任何需要金钱交易的无偿领养！例如宠物免费，骗取运费等常见骗术！</span> -->
             </div>
           </el-col>

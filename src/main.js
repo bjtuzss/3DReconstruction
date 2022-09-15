@@ -8,7 +8,8 @@ import axios from 'axios'
 
 Vue.config.productionTip = false
 // 配置请求的根路径
-axios.defaults.baseURL = 'http://127.0.0.1:5000'
+// axios.defaults.baseURL = 'http://127.0.0.1:5000'
+axios.defaults.baseURL = 'http://43.143.151.191:443'
 // axios.defaults.headers.option['Content-Type'] = 'application/json;charset=utf-8'
 // axios.interceptors.request.use(config => {
 //   console.log(config);
